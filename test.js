@@ -374,3 +374,46 @@ test('test request object with message', function (t) {
   })
 
 })
+
+
+test('test sub logger', function (t) {
+  t.plan(1)
+  t.on('end', bole.reset)
+
+  var sink     = bl()
+    , log      = bole('parent')
+    , expected = []
+    , sub1
+    , sub2
+
+  bole.output({
+      level  : 'debug'
+    , stream : sink
+  })
+
+  expected.push(mklogobj('parent', 'debug', { aDebug : 'object' }))
+  log.debug({ aDebug: 'object' })
+  expected.push(mklogobj('parent', 'info', { anInfo : 'object' }))
+  log.info({ anInfo: 'object' })
+  expected.push(mklogobj('parent', 'warn', { aWarn : 'object' }))
+  log.warn({ aWarn: 'object' })
+  expected.push(mklogobj('parent', 'error', { anError : 'object' }))
+  log.error({ anError: 'object' })
+
+  expected.push(mklogobj('parent:sub1', 'debug', { aDebug : 'object' }))
+  ;(sub1 = log('sub1')).debug({ aDebug: 'object' })
+  expected.push(mklogobj('parent:sub1', 'info', { anInfo : 'object' }))
+  sub1.info({ anInfo: 'object' })
+  expected.push(mklogobj('parent:sub2', 'warn', { aWarn : 'object' }))
+  ;(sub2 = log('sub2')).warn({ aWarn: 'object' })
+  expected.push(mklogobj('parent:sub2:subsub', 'error', { anError : 'object' }))
+  sub2('subsub').error({ anError: 'object' })
+
+  sink.end(function () {
+    var exp = expected.reduce(function (p, c) {
+      return p + JSON.stringify(c) + '\n'
+    }, '')
+
+    t.equal(safe(sink.slice().toString()), safe(exp))
+  })
+})

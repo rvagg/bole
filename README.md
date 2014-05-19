@@ -49,6 +49,7 @@ $ node main
 * Newline separated JSON output to arbitrary streams
 * Any number of output streams, each with configurable minimum log-levels
 * Fast short-circuit where no loggers are configured for the log-level, effectively making log statements a noop where they don't output
+* Sub-logger to split a logger for grouping types of events, such as individual HTTP request
 
 ## API
 
@@ -71,6 +72,28 @@ Log methods support the following types of input:
 * **console.log style output** so you can treat loggers just like `console.log()`: `log.info('logging a string')`, `log.info('it has been said that %d is the meaning of %s', 42, 'life')`, `log.debug('foo', 'bar', 'baz')`.
 
 If you require more sophisticated serialisation of your objects, then write a utility function to convert those objects to loggable objects.
+
+### logger()
+
+The `logger` object returned by `bole(name)` is also a function that accepts a `name` argument. It returns a new logger whose name is the parent logger with the new name appended after a `':'` character. This is useful for splitting a logger up for grouping events. Consider the HTTP server case where you may want to group all events from a particular request together:
+
+```js
+var log = bole('server')
+
+http.createServer(function (req, res) {
+  req.log = log(uuid.v4()) // make a new sub-logger
+  req.log.info(req)
+
+  //...
+
+  // log an error against this sub-logger
+  req.log.error(err)
+})
+```
+
+In this case, your events would be listed as something like `"name":"server:93f57a1a-ae59-46da-a625-8d084a77028a"` and each event for a particular request would have the same `"name"` property, distinct from the rest.
+
+Sub-loggers can even be split in to sub-sub loggers, the rabbit hole is ~bottomless.
 
 ### bole.output()
 

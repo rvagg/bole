@@ -18,7 +18,7 @@ function stackToString (e) {
 }
 
 
-function logger (level, name) {
+function levelLogger (level, name) {
   return function (inp) {
     var outputs = individual[level]
 
@@ -78,12 +78,16 @@ function logger (level, name) {
 
 
 function bole (name) {
+  function boleLogger (subname) {
+    return bole(name + ':' + subname)
+  }
+
   function makeLogger (p, level) {
-    p[level] = logger(level, name)
+    p[level] = levelLogger(level, name)
     return p
   }
 
-  return levels.reduce(makeLogger, {})
+  return levels.reduce(makeLogger, boleLogger)
 }
 
 
