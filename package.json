@@ -1,0 +1,25 @@
+{
+  "name": "bole",
+  "version": "0.0.0",
+  "description": "A tiny JSON logger",
+  "main": "bole.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "logging",
+    "json"
+  ],
+  "author": "Rod Vagg <r@va.gg> (@rvagg)",
+  "license": "MIT",
+  "dependencies": {
+    "json-stringify-safe": "~5.0.0",
+    "individual": "~2.0.0",
+    "core-util-is": "~1.0.1"
+  },
+  "devDependencies": {
+    "tape": "~2.13.1",
+    "bl": "~0.8.0",
+    "hyperquest": "~0.3.0"
+  }
+}
