@@ -12,6 +12,10 @@
   ],
   "author": "Rod Vagg <r@va.gg> (@rvagg)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rvagg/bole.git"
+  },
   "dependencies": {
     "json-stringify-safe": "~5.0.0",
     "individual": "~2.0.0",
