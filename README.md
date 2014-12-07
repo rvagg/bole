@@ -2,7 +2,7 @@
 
 **A tiny JSON logger**
 
-[![NPM](https://nodei.co/npm/bole.svg)](https://nodei.co/npm/bole/)
+[![NPM](https://nodei.co/npm/bole.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/bole/)
 
 Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bole** aims for even more simplicity, supporting only the common-case basics.
 
