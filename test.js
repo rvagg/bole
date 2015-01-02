@@ -1,10 +1,11 @@
-var http = require('http')
-  , hreq = require('hyperquest')
-  , test = require('tape')
-  , bl   = require('bl')
-  , bole = require('./')
-  , pid  = process.pid
-  , host = require('os').hostname()
+var http       = require('http')
+  , hreq       = require('hyperquest')
+  , test       = require('tape')
+  , bl         = require('bl')
+  , listStream = require('list-stream')
+  , bole       = require('./')
+  , pid        = process.pid
+  , host       = require('os').hostname()
 
 
 function mklogobj (name, level, inp) {
@@ -29,7 +30,7 @@ function mklogobj (name, level, inp) {
 // take a log string and zero out the millisecond field
 // to make comparison a little safer (not *entirely* safe)
 function safe (str) {
-  return str.replace(/("time":"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.)\d{3}Z"/, '$1xxxZ')
+  return str.replace(/("time":"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.)\d{3}Z"/g, '$1xxxZ')
 }
 
 
@@ -415,5 +416,34 @@ test('test sub logger', function (t) {
     }, '')
 
     t.equal(safe(sink.slice().toString()), safe(exp))
+  })
+})
+
+test('test object logging', function (t) {
+  t.on('end', bole.reset)
+
+  var sink     = listStream.obj()
+    , log      = bole('simple')
+    , expected = []
+
+  bole.output({
+      level      : 'debug'
+    , stream     : sink
+  })
+
+  expected.push(mklogobj('simple', 'debug', { aDebug : 'object' }))
+  log.debug({ aDebug: 'object' })
+  expected.push(mklogobj('simple', 'info', { anInfo : 'object' }))
+  log.info({ anInfo: 'object' })
+  expected.push(mklogobj('simple', 'warn', { aWarn : 'object' }))
+  log.warn({ aWarn: 'object' })
+  expected.push(mklogobj('simple', 'error', { anError : 'object' }))
+  log.error({ anError: 'object' })
+
+  sink.end(function () {
+    t.equal(sink.length, expected.length, 'correct number of log entries')
+    for (var i = 0; i < expected.length; i++)
+      t.deepEqual(sink.get(i), expected[i], 'correct log entry #' + i)
+    t.end()
   })
 })

@@ -34,7 +34,7 @@ function levelLogger (level, name) {
         }
       , k
       , i = 0
-      , s
+      , stringified
 
     if (is.isError(inp)) {
       if (arguments.length > 1)
@@ -69,10 +69,16 @@ function levelLogger (level, name) {
       out.message = format.apply(null, arguments)
     }
 
-    s = stringify(out) + '\n'
 
-    for (; i < outputs.length; i++)
-      outputs[i].write(s)
+    for (; i < outputs.length; i++) {
+      if (outputs[i]._readableState && outputs[i]._readableState.objectMode === true) {
+        outputs[i].write(out)
+      } else {
+        if (!stringified) // lazy stringify
+          stringified = stringify(out) + '\n'
+        outputs[i].write(stringified)
+      }
+    }
   }
 }
 

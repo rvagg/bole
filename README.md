@@ -50,6 +50,7 @@ $ node main
 * Any number of output streams, each with configurable minimum log-levels
 * Fast short-circuit where no loggers are configured for the log-level, effectively making log statements a noop where they don't output
 * Sub-logger to split a logger for grouping types of events, such as individual HTTP request
+* Object-logging (i.e. not automatically stringified) if you pass an `objectMode:true` stream for output.
 
 ## API
 
@@ -98,6 +99,8 @@ Sub-loggers can even be split in to sub-sub loggers, the rabbit hole is ~bottoml
 ### bole.output()
 
 Add outputs for application-wide logging, accepts either an object for defining a single output or an array of objects defining multiple outputs. Each output requires only a `'level'` and a `'stream'`, where the *level* defines the *minimum* debug level to print to this stream and the *stream* is any `WritableStream` that accepts a `.write()` method.
+
+If you pass in a stream with `objectMode` set to `true` then you will receive the raw log objects rather than their stringified versions.
 
 ```js
 bole.output([
