@@ -31,6 +31,8 @@ function mklogobj (name, level, inp) {
 // to make comparison a little safer (not *entirely* safe)
 function safe (str) {
   return str.replace(/("time":"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.)\d{3}Z"/g, '$1xxxZ')
+            .replace(/("remoteAddress":")(?:::ffff:)?(127.0.0.1")/g, '$1$2')
+            .replace(/("host":")(?:(?:localhost)|(?:::))(:\d+")/g, '$1$2')
 }
 
 

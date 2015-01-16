@@ -71,7 +71,7 @@ function levelLogger (level, name) {
 
 
     for (; i < outputs.length; i++) {
-      if (outputs[i]._readableState && outputs[i]._readableState.objectMode === true) {
+      if (outputs[i]._writableState && outputs[i]._writableState.objectMode === true) {
         outputs[i].write(out)
       } else {
         if (!stringified) // lazy stringify
