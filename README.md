@@ -104,8 +104,8 @@ If you pass in a stream with `objectMode` set to `true` then you will receive th
 
 ```js
 bole.output([
-  { level: 'debug', fs.createWriteStream('app.log') },
-  { level: 'info', process.stdout }
+  { level: 'debug', stream: fs.createWriteStream('app.log') },
+  { level: 'info', stream: process.stdout }
 ])
 ```
 
