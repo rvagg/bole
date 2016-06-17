@@ -8,9 +8,9 @@ var http       = require('http')
   , host       = require('os').hostname()
 
 
-function mklogobj (name, level, inp) {
+function mklogobj (name, level, inp, fastTime) {
   var out = {
-          time     : new Date().toISOString()
+          time     : fastTime ? Date.now() : new Date().toISOString()
         , hostname : host
         , pid      : pid
         , level    : level
@@ -322,7 +322,7 @@ test('test request object', function (t) {
     })
   })
 
-  server.listen(function () {
+  server.listen(0, '127.0.0.1', function () {
     hreq.get('http://' + (host = this.address().address + ':' + this.address().port) + '/foo?bar=baz')
   })
 
@@ -372,7 +372,7 @@ test('test request object with message', function (t) {
     })
   })
 
-  server.listen(function () {
+  server.listen(0, '127.0.0.1', function () {
     hreq.get('http://' + (host = this.address().address + ':' + this.address().port) + '/foo?bar=baz')
   })
 
@@ -447,5 +447,39 @@ test('test object logging', function (t) {
     for (var i = 0; i < expected.length; i++)
       t.deepEqual(sink.get(i), expected[i], 'correct log entry #' + i)
     t.end()
+  })
+})
+
+
+test('test fast time', function (t) {
+  t.plan(1)
+  t.on('end', bole.reset)
+
+  var sink     = bl()
+    , log      = bole('simple')
+    , expected = []
+
+  bole.output({
+      level  : 'debug'
+    , stream : sink
+  })
+
+  bole.setFastTime(true)
+
+  expected.push(mklogobj('simple', 'debug', { aDebug : 'object' }, true))
+  log.debug({ aDebug: 'object' })
+  expected.push(mklogobj('simple', 'info', { anInfo : 'object' }, true))
+  log.info({ anInfo: 'object' })
+  expected.push(mklogobj('simple', 'warn', { aWarn : 'object' }, true))
+  log.warn({ aWarn: 'object' })
+  expected.push(mklogobj('simple', 'error', { anError : 'object' }, true))
+  log.error({ anError: 'object' })
+
+  sink.end(function () {
+    var exp = expected.reduce(function (p, c) {
+      return p + JSON.stringify(c) + '\n'
+    }, '')
+
+    t.equal(safe(sink.slice().toString()), safe(exp))
   })
 })
