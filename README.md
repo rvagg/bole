@@ -113,6 +113,12 @@ bole.output([
 
 Clears all output streams from the application
 
+### bole.setFastTime()
+
+If speed is something you care about and you can handle time in milliseconds since epoch (`Date.now()`) rather than the full ISO string (`new Date().toISOString()`) in your logs then use `bole.setFastTime(true)` to shave off some precious microseconds.
+
+Note that this will reset to the default of `false` when you use `bole.reset()`
+
 ## Additional features
 
 If you need to serialise specific types of objects then **write a utility function** to convert to a loggable object.

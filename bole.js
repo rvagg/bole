@@ -1,81 +1,111 @@
-var stringify  = require('json-stringify-safe')
-  , format     = require('util').format
-  , is         = require('core-util-is')
+var stringify  = require('fast-safe-stringify')
   , individual = require('individual')('$$bole', { })
+  , format     = require('./format')
   , levels     = 'debug info warn error'.split(' ')
   , hostname   = require('os').hostname()
   , pid        = process.pid
+  , hasObjMode = false
+  , fastTime   = false
 
 
 function stackToString (e) {
   var s = e.stack
     , ce
 
-  if (is.isFunction(e.cause) && (ce = e.cause()))
+  if (typeof e.cause === 'function' && (ce = e.cause()))
     s += '\nCaused by: ' + stackToString(ce)
 
   return s
 }
 
 
+function errorToOut (err, out) {
+  out.err = {
+      name    : err.name
+    , message : err.message
+    , code    : err.code // perhaps
+    , stack   : stackToString(err)
+  }
+}
+
+
+function requestToOut (req, out) {
+  out.req = {
+      method        : req.method
+    , url           : req.url
+    , headers       : req.headers
+    , remoteAddress : req.connection.remoteAddress
+    , remotePort    : req.connection.remotePort
+  }
+}
+
+
+function objectToOut (obj, out) {
+  var k
+
+  for (k in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, k))
+      out[k] = obj[k]
+  }
+}
+
+
+function objectMode (stream) {
+  return stream._writableState && stream._writableState.objectMode === true
+}
+
+
+function Output (level, name) {
+  this.time = fastTime ? Date.now() : new Date().toISOString()
+  this.hostname = hostname
+  this.pid = pid
+  this.level = level
+  this.name = name
+}
+
+
 function levelLogger (level, name) {
-  return function (inp) {
+  return function namedLevelLogger (inp, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16) {
     var outputs = individual[level]
 
     if (!outputs)
       return // no outputs for this level
 
-    var out = {
-            time     : new Date().toISOString()
-          , hostname : hostname
-          , pid      : pid
-          , level    : level
-          , name     : name
-        }
-      , k
+    var out = new Output(level, name)
       , i = 0
+      , l = outputs.length
       , stringified
+      , message
 
-    if (is.isError(inp)) {
-      if (arguments.length > 1)
-        out.message = format.apply(null, Array.prototype.slice.call(arguments, 1))
-
-      out.err = {
-          name    : inp.name
-        , message : inp.message
-        , code    : inp.code // perhaps
-        , stack   : stackToString(inp)
+    if (inp == null || typeof inp === 'string') {
+      if (message = format(inp, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16))
+        out.message = message
+    } else {
+      if (message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16))
+        out.message = message
+      if (typeof inp === 'boolean')
+        out.message = String(inp)
+      else if (inp instanceof Error) {
+        errorToOut(inp, out)
+      } else if (typeof inp === 'object') {
+        if (inp.method && inp.url && inp.headers && inp.socket)
+          requestToOut(inp, out)
+        else
+          objectToOut(inp, out)
       }
-    } else if (is.isObject(inp) && inp.method && inp.url && inp.headers && inp.socket) {
-      if (arguments.length > 1)
-        out.message = format.apply(null, Array.prototype.slice.call(arguments, 1))
-
-      out.req = {
-          method        : inp.method
-        , url           : inp.url
-        , headers       : inp.headers
-        , remoteAddress : inp.connection.remoteAddress
-        , remotePort    : inp.connection.remotePort
-      }
-    } else if (is.isObject(inp)) {
-      if (arguments.length > 1)
-        out.message = format.apply(null, Array.prototype.slice.call(arguments, 1))
-
-      for (k in inp) {
-        if (Object.prototype.hasOwnProperty.call(inp, k))
-          out[k] = inp[k]
-      }
-    } else if (!is.isUndefined(inp)) {
-      out.message = format.apply(null, arguments)
     }
 
+    if (l === 1 && !hasObjMode) { // fast, standard case
+      outputs[0].write(new Buffer(stringify(out) + '\n', 'utf8'))
+      return
+    }
 
-    for (; i < outputs.length; i++) {
-      if (outputs[i]._writableState && outputs[i]._writableState.objectMode === true) {
+    for (; i < l; i++) {
+      if (objectMode(outputs[i])) {
         outputs[i].write(out)
       } else {
-        if (!stringified) // lazy stringify
-          stringified = stringify(out) + '\n'
+        if (stringified === undefined) // lazy stringify
+          stringified = new Buffer(stringify(out) + '\n', 'utf8')
         outputs[i].write(stringified)
       }
     }
@@ -97,9 +127,11 @@ function bole (name) {
 }
 
 
-bole.output = function (opt) {
-  if (Array.isArray(opt))
-    return opt.forEach(bole.output)
+bole.output = function output (opt) {
+  if (Array.isArray(opt)) {
+    opt.forEach(bole.output)
+    return bole
+  }
 
   var i = 0
     , b = false
@@ -111,15 +143,29 @@ bole.output = function (opt) {
     if (b) {
       if (!individual[levels[i]])
         individual[levels[i]] = []
+      if (opt.stream && objectMode(opt.stream))
+        hasObjMode = true
       individual[levels[i]].push(opt.stream)
     }
   }
+  return bole
 }
 
 
-bole.reset = function () {
+bole.reset = function reset () {
   for (var k in individual)
     delete individual[k]
+  fastTime = false
+  return bole
+}
+
+
+bole.setFastTime = function setFastTime (b) {
+  if (!arguments.length)
+    fastTime = true
+  else
+    fastTime = b
+  return bole
 }
 
 

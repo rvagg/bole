@@ -17,14 +17,13 @@
     "url": "https://github.com/rvagg/bole.git"
   },
   "dependencies": {
-    "core-util-is": ">=1.0.1 <1.1.0-0",
-    "individual": ">=3.0.0 <3.1.0-0",
-    "json-stringify-safe": ">=5.0.0 <5.1.0-0"
+    "fast-safe-stringify": "~1.0.9",
+    "individual": "~3.0.0"
   },
   "devDependencies": {
-    "bl": ">=0.9.3 <0.10.0-0",
-    "hyperquest": ">=1.0.1 <1.1.0-0",
-    "list-stream": ">=1.0.0 <1.1.0-0",
-    "tape": ">=3.0.3 <3.1.0-0"
+    "bl": "~1.1.2",
+    "hyperquest": "~1.3.0",
+    "list-stream": "~1.0.1",
+    "tape": "~4.5.1"
   }
 }
