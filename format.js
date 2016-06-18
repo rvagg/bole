@@ -34,9 +34,7 @@ function format (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a1
     return utilformat(a1, a2, a3)
   if (a2 !== undefined)
     return utilformat(a1, a2)
-  if (a1 !== undefined)
-    return utilformat(a1)
-  return undefined
+  return a1
 }
 
 module.exports = format

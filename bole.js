@@ -1,11 +1,18 @@
-var stringify  = require('fast-safe-stringify')
+var _stringify = require('fast-safe-stringify')
   , individual = require('individual')('$$bole', { })
   , format     = require('./format')
   , levels     = 'debug info warn error'.split(' ')
   , hostname   = require('os').hostname()
+  , hostnameSt = _stringify(hostname)
   , pid        = process.pid
   , hasObjMode = false
   , fastTime   = false
+
+
+levels.forEach(function (level) {
+  if (!Array.isArray(individual[level]))
+    individual[level] = []
+})
 
 
 function stackToString (e) {
@@ -64,27 +71,70 @@ function Output (level, name) {
 }
 
 
+function stringify (level, name, message, obj) {
+  var k
+    , s = '{"time":'
+        + (fastTime ? Date.now() : ('"' + new Date().toISOString() + '"'))
+        + ',"hostname":'
+        + hostnameSt
+        + ',"pid":'
+        + pid
+        + ',"level":"'
+        + level
+        + '","name":'
+        + name
+        + (message !== undefined ? (',"message":' + _stringify(message)) : '')
+
+  for (k in obj)
+    s += ',' + _stringify(k) + ':' + _stringify(obj[k])
+
+  return s + '}'
+}
+
+
+function extend (level, name, message, obj) {
+  var k
+    , newObj = {
+          time     : fastTime ? Date.now() : new Date().toISOString()
+        , hostname : hostname
+        , pid      : pid
+        , level    : level
+        , name     : name
+      }
+
+  if (message !== undefined)
+    obj.message = message
+
+  for (k in obj)
+    newObj[k] = obj[k]
+
+  return newObj
+}
+
+
 function levelLogger (level, name) {
+  var outputs = individual[level]
+    , nameSt  = _stringify(name)
+
   return function namedLevelLogger (inp, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16) {
-    var outputs = individual[level]
+    if (outputs.length === 0)
+      return
 
-    if (!outputs)
-      return // no outputs for this level
-
-    var out = new Output(level, name)
+    var out = {}
+      , objectOut
       , i = 0
       , l = outputs.length
       , stringified
       , message
 
-    if (inp == null || typeof inp === 'string') {
-      if (message = format(inp, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16))
-        out.message = message
+    if (typeof inp === 'string' || inp == null) {
+      if (!(message = format(inp, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
+        message = undefined
     } else {
-      if (message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16))
-        out.message = message
+      if (!(message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
+        message = undefined
       if (typeof inp === 'boolean')
-        out.message = String(inp)
+        message = String(inp)
       else if (inp instanceof Error) {
         errorToOut(inp, out)
       } else if (typeof inp === 'object') {
@@ -96,16 +146,18 @@ function levelLogger (level, name) {
     }
 
     if (l === 1 && !hasObjMode) { // fast, standard case
-      outputs[0].write(new Buffer(stringify(out) + '\n', 'utf8'))
+      outputs[0].write(new Buffer(stringify(level, nameSt, message, out) + '\n'))
       return
     }
 
     for (; i < l; i++) {
       if (objectMode(outputs[i])) {
-        outputs[i].write(out)
+        if (objectOut === undefined) // lazy object completion
+          objectOut = extend(level, name, message, out)
+        outputs[i].write(objectOut)
       } else {
         if (stringified === undefined) // lazy stringify
-          stringified = new Buffer(stringify(out) + '\n', 'utf8')
+          stringified = new Buffer(stringify(level, nameSt, message, out) + '\n')
         outputs[i].write(stringified)
       }
     }
@@ -128,33 +180,35 @@ function bole (name) {
 
 
 bole.output = function output (opt) {
+  var i = 0, b
+
   if (Array.isArray(opt)) {
     opt.forEach(bole.output)
     return bole
   }
 
-  var i = 0
-    , b = false
+  if (typeof opt.level !== 'string')
+    throw new TypeError('Must provide a "level" option')
 
   for (; i < levels.length; i++) {
-    if (levels[i] === opt.level)
+    if (!b && levels[i] === opt.level)
       b = true
 
     if (b) {
-      if (!individual[levels[i]])
-        individual[levels[i]] = []
       if (opt.stream && objectMode(opt.stream))
         hasObjMode = true
       individual[levels[i]].push(opt.stream)
     }
   }
+
   return bole
 }
 
 
 bole.reset = function reset () {
-  for (var k in individual)
-    delete individual[k]
+  levels.forEach(function (level) {
+    individual[level].splice(0, individual[level].length)
+  })
   fastTime = false
   return bole
 }
