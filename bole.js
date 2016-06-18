@@ -1,12 +1,11 @@
 var _stringify = require('fast-safe-stringify')
-  , individual = require('individual')('$$bole', { }) // singleton
+  , individual = require('individual')('$$bole', { fastTime: false }) // singleton
   , format     = require('./format')
   , levels     = 'debug info warn error'.split(' ')
   , hostname   = require('os').hostname()
   , hostnameSt = _stringify(hostname)
   , pid        = process.pid
   , hasObjMode = false
-  , fastTime   = false
   , scache     = []
 
 levels.forEach(function (level) {
@@ -69,7 +68,7 @@ function objectMode (stream) {
 function stringify (level, name, message, obj) {
   var k
     , s = '{"time":'
-        + (fastTime ? Date.now() : ('"' + new Date().toISOString() + '"'))
+        + (individual.fastTime ? Date.now() : ('"' + new Date().toISOString() + '"'))
         + scache[level]
         + '","name":'
         + name
@@ -89,7 +88,7 @@ function stringify (level, name, message, obj) {
 function extend (level, name, message, obj) {
   var k
     , newObj = {
-          time     : fastTime ? Date.now() : new Date().toISOString()
+          time     : individual.fastTime ? Date.now() : new Date().toISOString()
         , hostname : hostname
         , pid      : pid
         , level    : level
@@ -203,16 +202,16 @@ bole.reset = function reset () {
   levels.forEach(function (level) {
     individual[level].splice(0, individual[level].length)
   })
-  fastTime = false
+  individual.fastTime = false
   return bole
 }
 
 
 bole.setFastTime = function setFastTime (b) {
   if (!arguments.length)
-    fastTime = true
+    individual.fastTime = true
   else
-    fastTime = b
+    individual.fastTime = b
   return bole
 }
 
