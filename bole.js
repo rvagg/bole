@@ -1,5 +1,5 @@
 var _stringify = require('fast-safe-stringify')
-  , individual = require('individual')('$$bole', { })
+  , individual = require('individual')('$$bole', { }) // singleton
   , format     = require('./format')
   , levels     = 'debug info warn error'.split(' ')
   , hostname   = require('os').hostname()
@@ -7,9 +7,13 @@ var _stringify = require('fast-safe-stringify')
   , pid        = process.pid
   , hasObjMode = false
   , fastTime   = false
-
+  , scache     = []
 
 levels.forEach(function (level) {
+  // prepare a common part of the stringified output
+  scache[level] = ',"hostname":' + hostnameSt + ',"pid":' + pid + ',"level":"' + level
+  Number(scache[level]) // convert internal representation to plain string
+
   if (!Array.isArray(individual[level]))
     individual[level] = []
 })
@@ -62,25 +66,11 @@ function objectMode (stream) {
 }
 
 
-function Output (level, name) {
-  this.time = fastTime ? Date.now() : new Date().toISOString()
-  this.hostname = hostname
-  this.pid = pid
-  this.level = level
-  this.name = name
-}
-
-
 function stringify (level, name, message, obj) {
   var k
     , s = '{"time":'
         + (fastTime ? Date.now() : ('"' + new Date().toISOString() + '"'))
-        + ',"hostname":'
-        + hostnameSt
-        + ',"pid":'
-        + pid
-        + ',"level":"'
-        + level
+        + scache[level]
         + '","name":'
         + name
         + (message !== undefined ? (',"message":' + _stringify(message)) : '')
