@@ -88,7 +88,11 @@ function stringify (level, name, message, obj) {
   for (k in obj)
     s += ',' + _stringify(k) + ':' + _stringify(obj[k])
 
-  return s + '}'
+  s += '}'
+
+  Number(s) // convert internal representation to plain string
+
+  return s
 }
 
 
