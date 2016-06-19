@@ -1,12 +1,12 @@
 # bole
 
-**A tiny JSON logger**
+**A tiny JSON logger, optimised for speed and simplicity**
 
 [![NPM](https://nodei.co/npm/bole.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/bole/)
 
 Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bole** aims for even more simplicity, supporting only the common-case basics.
 
-**bole** is designed for global singleton use. Your application has many log sources, but they all aggregate to the same sources. You configure output in *one place* for an application, regardless of how many modules and dependencies are also using **bole** for logging.
+**bole** is designed for **global singleton use**. Your application has many log sources, but they all aggregate to the same sources. You configure output in *one place* for an application, regardless of how many modules and dependencies are also using **bole** for logging.
 
 ## Example
 
@@ -40,6 +40,7 @@ $ node main
 
 ## Features
 
+* Very fast, bole has been optimised for common cases and is designed to add minimal overhead to your applications, use the `fastTime` feature (below) to make it even faster
 * Arbitrary log **names**, create a logger by calling `var log = bole('logname')` and `'logname'` will be attached to the output
 * Loggers have 4 levels / methods: `log.debug()`, `log.info()`, `log.warn()`, `log.error()`
 * Log methods accept `console.log()` style strfmt output ( using`util.format()`): `log.warn('foo %s', 'bar')`
