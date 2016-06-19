@@ -68,6 +68,36 @@ test('test simple logging', function (t) {
 })
 
 
+test('test complex object logging', function (t) {
+  t.plan(1)
+  t.on('end', bole.reset)
+
+  var sink     = bl()
+    , log      = bole('simple')
+    , expected = []
+    , cplx     = {
+          aDebug : 'object'
+        , deep   : { deeper: { deeperStill: { tooDeep: 'whoa' }, arr: [ 1, 2, 3, { eh: 'wut?' } ] } }
+      }
+
+  bole.output({
+      level  : 'debug'
+    , stream : sink
+  })
+
+  expected.push(mklogobj('simple', 'debug', cplx))
+  log.debug(cplx)
+
+  sink.end(function () {
+    var exp = expected.reduce(function (p, c) {
+      return p + JSON.stringify(c) + '\n'
+    }, '')
+
+    t.equal(safe(sink.slice().toString()), safe(exp))
+  })
+})
+
+
 test('test multiple logs', function (t) {
   t.plan(1)
   t.on('end', bole.reset)
@@ -181,7 +211,7 @@ test('test multiple outputs', function (t) {
 
 
 test('test string formatting', function (t) {
-  t.plan(7)
+  t.plan(8)
   t.on('end', bole.reset)
 
   function testSingle (level, msg, args) {
@@ -211,6 +241,11 @@ test('test string formatting', function (t) {
   testSingle('info', { message: 'false' }, [ false ])
   testSingle('warn', { message: 'a number [42]' }, [ 'a number [%d]', 42 ])
   testSingle('error', { message: 'a string [str]' }, [ 'a string [%s]', 'str' ])
+  testSingle(
+        'error'
+      , { message: 'a string [str], a number [101], s, 1, 2 a b c' }
+      , [ 'a string [%s], a number [%d], %s, %s, %s', 'str', 101, 's', 1, 2, 'a', 'b', 'c' ]
+  )
   testSingle('error', { message: 'foo bar baz' }, [ 'foo', 'bar', 'baz' ])
 })
 
