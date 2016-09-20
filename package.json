@@ -17,7 +17,7 @@
     "url": "https://github.com/rvagg/bole.git"
   },
   "dependencies": {
-    "fast-safe-stringify": "~1.0.9",
+    "fast-safe-stringify": "~1.1.0",
     "individual": "~3.0.0"
   },
   "devDependencies": {
