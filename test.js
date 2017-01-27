@@ -502,10 +502,9 @@ test('test error and object logging', function (t) {
 
   var _expected = mklogobj('errobjfmt', 'debug', {
       aDebug  : 'object'
-    , message : 'anError'
     , err     : {
           name    : 'Error'
-        , message : 'error msg in here'
+        , message : 'anError'
         , stack   : 'STACK'
       }
   })
