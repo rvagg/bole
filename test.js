@@ -485,6 +485,42 @@ test('test object logging', function (t) {
   })
 })
 
+test('test error and object logging', function (t) {
+  t.on('end', bole.reset)
+
+  var sink     = bl()
+    , log      = bole('errobjfmt')
+    , expected = []
+    , err      = new Error('anError')
+
+  bole.output({
+      level      : 'debug'
+    , stream     : sink
+  })
+
+  log.debug(err, { aDebug: 'object' })
+
+  var _expected = mklogobj('errobjfmt', 'debug', {
+      aDebug  : 'object'
+    , message : 'anError'
+    , err     : {
+          name    : 'Error'
+        , message : 'error msg in here'
+        , stack   : 'STACK'
+      }
+  })
+  var expected = safe(JSON.stringify(_expected) + '\n')
+
+  sink.end(function () {
+    var exp = JSON.stringify(expected) + '\n'
+      , act = safe(sink.slice().toString())
+
+    act = act.replace(/("stack":")Error:[^"]+/, '$1STACK')
+
+    t.equal(act, expected)
+    t.end()
+  })
+})
 
 test('test fast time', function (t) {
   t.plan(1)
