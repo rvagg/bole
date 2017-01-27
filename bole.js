@@ -124,13 +124,24 @@ function levelLogger (level, name) {
       if (!(message = format(inp, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
         message = undefined
     } else {
-      if (!(message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
-        message = undefined
+      if (inp instanceof Error) {
+        if (typeof a2 === 'object') {
+          objectToOut(a2, out)
+          errorToOut(inp, out)
+          if (!(message = format(a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
+            message = undefined
+        } else {
+          errorToOut(inp, out)
+          if (!(message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
+            message = undefined
+        }
+      } else {
+        if (!(message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
+          message = undefined
+      }
       if (typeof inp === 'boolean')
         message = String(inp)
-      else if (inp instanceof Error) {
-        errorToOut(inp, out)
-      } else if (typeof inp === 'object') {
+      else if (typeof inp === 'object' && !(inp instanceof Error)) {
         if (inp.method && inp.url && inp.headers && inp.socket)
           requestToOut(inp, out)
         else
