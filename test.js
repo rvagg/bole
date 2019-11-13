@@ -553,3 +553,28 @@ test('test fast time', function (t) {
     t.equal(safe(sink.slice().toString()), safe(exp))
   })
 })
+
+test('test undefined values', function (t) {
+  t.plan(1)
+  t.on('end', bole.reset)
+
+  var sink     = bl()
+    , log      = bole('simple')
+    , expected = []
+
+  bole.output({
+      level  : 'debug'
+    , stream : sink
+  })
+
+  expected.push(mklogobj('simple', 'debug', { message: 'testing', aDebug : undefined }))
+  log.debug({ aDebug: undefined }, 'testing')
+
+  sink.end(function () {
+    var exp = expected.reduce(function (p, c) {
+      return p + JSON.stringify(c) + '\n'
+    }, '')
+
+    t.equal(safe(sink.slice().toString()), safe(exp))
+  })
+})

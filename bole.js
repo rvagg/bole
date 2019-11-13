@@ -54,7 +54,7 @@ function objectToOut (obj, out) {
   var k
 
   for (k in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, k))
+    if (Object.prototype.hasOwnProperty.call(obj, k) && obj[k] !== undefined)
       out[k] = obj[k]
   }
 }
