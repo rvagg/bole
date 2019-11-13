@@ -2,7 +2,7 @@
 
 **A tiny JSON logger, optimised for speed and simplicity**
 
-[![NPM](https://nodei.co/npm/bole.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/bole/)
+[![NPM](https://nodei.co/npm/bole.svg)](https://nodei.co/npm/bole/)
 
 Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bole** aims for even more simplicity, supporting only the common-case basics.
 
@@ -12,7 +12,7 @@ Log JSON from within Node.js applications. The log format is obviously inspired 
 
 **mymodule.js**
 ```js
-var log = require('bole')('mymodule')
+const log = require('bole')('mymodule')
 
 module.exports.derp = function derp() {
   log.debug('W00t!')
@@ -22,8 +22,8 @@ module.exports.derp = function derp() {
 
 **main.js**
 ```js
-var bole = require('bole')
-var mod  = require('./mymodule')
+const bole = require('bole')
+const mod  = require('./mymodule')
 
 bole.output({
   level: 'info',
@@ -41,7 +41,7 @@ $ node main
 ## Features
 
 * Very fast, bole has been optimised for common cases and is designed to add minimal overhead to your applications, use the `fastTime` feature (below) to make it even faster
-* Arbitrary log **names**, create a logger by calling `var log = bole('logname')` and `'logname'` will be attached to the output
+* Arbitrary log **names**, create a logger by calling `const log = bole('logname')` and `'logname'` will be attached to the output
 * Loggers have 4 levels / methods: `log.debug()`, `log.info()`, `log.warn()`, `log.error()`
 * Log methods accept `console.log()` style strfmt output ( using`util.format()`): `log.warn('foo %s', 'bar')`
 * Log methods accept arbitrary objects that extend the log output data, each property on the object is attached to the debug output object
@@ -80,9 +80,9 @@ If you require more sophisticated serialisation of your objects, then write a ut
 The `logger` object returned by `bole(name)` is also a function that accepts a `name` argument. It returns a new logger whose name is the parent logger with the new name appended after a `':'` character. This is useful for splitting a logger up for grouping events. Consider the HTTP server case where you may want to group all events from a particular request together:
 
 ```js
-var log = bole('server')
+const log = bole('server')
 
-http.createServer(function (req, res) {
+http.createServer((req, res) => {
   req.log = log(uuid.v4()) // make a new sub-logger
   req.log.info(req)
 

@@ -1,81 +1,78 @@
-var _stringify = require('fast-safe-stringify')
-  , individual = require('individual')('$$bole', { fastTime: false }) // singleton
-  , format     = require('./format')
-  , levels     = 'debug info warn error'.split(' ')
-  , hostname   = require('os').hostname()
-  , hostnameSt = _stringify(hostname)
-  , pid        = process.pid
-  , hasObjMode = false
-  , scache     = []
+'use strict'
 
-levels.forEach(function (level) {
+const _stringify = require('fast-safe-stringify')
+const individual = require('individual')('$$bole', { fastTime: false }) // singleton
+const format = require('./format')
+const levels = 'debug info warn error'.split(' ')
+const hostname = require('os').hostname()
+const hostnameSt = _stringify(hostname)
+const pid = process.pid
+let hasObjMode = false
+const scache = []
+
+for (const level of levels) {
   // prepare a common part of the stringified output
   scache[level] = ',"hostname":' + hostnameSt + ',"pid":' + pid + ',"level":"' + level
   Number(scache[level]) // convert internal representation to plain string
 
-  if (!Array.isArray(individual[level]))
+  if (!Array.isArray(individual[level])) {
     individual[level] = []
-})
-
+  }
+}
 
 function stackToString (e) {
-  var s = e.stack
-    , ce
+  let s = e.stack
+  let ce
 
-  if (typeof e.cause === 'function' && (ce = e.cause()))
+  if (typeof e.cause === 'function' && (ce = e.cause())) {
     s += '\nCaused by: ' + stackToString(ce)
+  }
 
   return s
 }
 
-
 function errorToOut (err, out) {
   out.err = {
-      name    : err.name
-    , message : err.message
-    , code    : err.code // perhaps
-    , stack   : stackToString(err)
+    name: err.name,
+    message: err.message,
+    code: err.code, // perhaps
+    stack: stackToString(err)
   }
 }
-
 
 function requestToOut (req, out) {
   out.req = {
-      method        : req.method
-    , url           : req.url
-    , headers       : req.headers
-    , remoteAddress : req.connection.remoteAddress
-    , remotePort    : req.connection.remotePort
+    method: req.method,
+    url: req.url,
+    headers: req.headers,
+    remoteAddress: req.connection.remoteAddress,
+    remotePort: req.connection.remotePort
   }
 }
-
 
 function objectToOut (obj, out) {
-  var k
-
-  for (k in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, k) && obj[k] !== undefined)
+  for (const k in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, k) && obj[k] !== undefined) {
       out[k] = obj[k]
+    }
   }
 }
-
 
 function objectMode (stream) {
   return stream._writableState && stream._writableState.objectMode === true
 }
 
-
 function stringify (level, name, message, obj) {
-  var k
-    , s = '{"time":'
-        + (individual.fastTime ? Date.now() : ('"' + new Date().toISOString() + '"'))
-        + scache[level]
-        + '","name":'
-        + name
-        + (message !== undefined ? (',"message":' + _stringify(message)) : '')
+  let s = '{"time":' +
+        (individual.fastTime ? Date.now() : ('"' + new Date().toISOString() + '"')) +
+        scache[level] +
+        '","name":' +
+        name +
+        (message !== undefined ? (',"message":' + _stringify(message)) : '')
 
-  for (k in obj)
+  for (const k in obj) {
     s += ',' + _stringify(k) + ':' + _stringify(obj[k])
+  }
 
   s += '}'
 
@@ -84,90 +81,90 @@ function stringify (level, name, message, obj) {
   return s
 }
 
-
 function extend (level, name, message, obj) {
-  var k
-    , newObj = {
-          time     : individual.fastTime ? Date.now() : new Date().toISOString()
-        , hostname : hostname
-        , pid      : pid
-        , level    : level
-        , name     : name
-      }
+  const newObj = {
+    time: individual.fastTime ? Date.now() : new Date().toISOString(),
+    hostname: hostname,
+    pid: pid,
+    level: level,
+    name: name
+  }
 
-  if (message !== undefined)
+  if (message !== undefined) {
     obj.message = message
+  }
 
-  for (k in obj)
+  for (const k in obj) {
     newObj[k] = obj[k]
+  }
 
   return newObj
 }
 
-
 function levelLogger (level, name) {
-  var outputs = individual[level]
-    , nameSt  = _stringify(name)
+  const outputs = individual[level]
+  const nameSt = _stringify(name)
 
   return function namedLevelLogger (inp, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16) {
-    if (outputs.length === 0)
+    if (outputs.length === 0) {
       return
+    }
 
-    var out = {}
-      , objectOut
-      , i = 0
-      , l = outputs.length
-      , stringified
-      , message
+    const out = {}
+    let objectOut
+    let i = 0
+    const l = outputs.length
+    let stringified
+    let message
 
     if (typeof inp === 'string' || inp == null) {
-      if (!(message = format(inp, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
+      if (!(message = format(inp, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16))) {
         message = undefined
+      }
     } else {
       if (inp instanceof Error) {
         if (typeof a2 === 'object') {
           objectToOut(a2, out)
           errorToOut(inp, out)
-          if (!(message = format(a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
+          if (!(message = format(a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16))) {
             message = undefined
+          }
         } else {
           errorToOut(inp, out)
-          if (!(message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
+          if (!(message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16))) {
             message = undefined
+          }
         }
       } else {
-        if (!(message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16)))
+        if (!(message = format(a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16))) {
           message = undefined
+        }
       }
-      if (typeof inp === 'boolean')
-        message = String(inp)
-      else if (typeof inp === 'object' && !(inp instanceof Error)) {
-        if (inp.method && inp.url && inp.headers && inp.socket)
-          requestToOut(inp, out)
-        else
-          objectToOut(inp, out)
+      if (typeof inp === 'boolean') { message = String(inp) } else if (typeof inp === 'object' && !(inp instanceof Error)) {
+        if (inp.method && inp.url && inp.headers && inp.socket) { requestToOut(inp, out) } else { objectToOut(inp, out) }
       }
     }
 
     if (l === 1 && !hasObjMode) { // fast, standard case
-      outputs[0].write(new Buffer(stringify(level, nameSt, message, out) + '\n'))
+      outputs[0].write(Buffer.from(stringify(level, nameSt, message, out) + '\n'))
       return
     }
 
     for (; i < l; i++) {
       if (objectMode(outputs[i])) {
-        if (objectOut === undefined) // lazy object completion
+        if (objectOut === undefined) { // lazy object completion
           objectOut = extend(level, name, message, out)
+        }
         outputs[i].write(objectOut)
       } else {
-        if (stringified === undefined) // lazy stringify
-          stringified = new Buffer(stringify(level, nameSt, message, out) + '\n')
+        if (stringified === undefined) { // lazy stringify
+          stringified = Buffer.from(stringify(level, nameSt, message, out) + '\n')
+        }
         outputs[i].write(stringified)
       }
     }
   }
 }
-
 
 function bole (name) {
   function boleLogger (subname) {
@@ -182,49 +179,50 @@ function bole (name) {
   return levels.reduce(makeLogger, boleLogger)
 }
 
-
 bole.output = function output (opt) {
-  var i = 0, b
+  let b = false
 
   if (Array.isArray(opt)) {
     opt.forEach(bole.output)
     return bole
   }
 
-  if (typeof opt.level !== 'string')
+  if (typeof opt.level !== 'string') {
     throw new TypeError('Must provide a "level" option')
+  }
 
-  for (; i < levels.length; i++) {
-    if (!b && levels[i] === opt.level)
+  for (const level of levels) {
+    if (!b && level === opt.level) {
       b = true
+    }
 
     if (b) {
-      if (opt.stream && objectMode(opt.stream))
+      if (opt.stream && objectMode(opt.stream)) {
         hasObjMode = true
-      individual[levels[i]].push(opt.stream)
+      }
+      individual[level].push(opt.stream)
     }
   }
 
   return bole
 }
 
-
 bole.reset = function reset () {
-  levels.forEach(function (level) {
+  for (const level of levels) {
     individual[level].splice(0, individual[level].length)
-  })
+  }
   individual.fastTime = false
   return bole
 }
 
-
 bole.setFastTime = function setFastTime (b) {
-  if (!arguments.length)
+  if (!arguments.length) {
     individual.fastTime = true
-  else
+  } else {
     individual.fastTime = b
+  }
+
   return bole
 }
-
 
 module.exports = bole
