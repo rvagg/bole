@@ -1,3 +1,17 @@
+## [5.0.0](https://github.com/rvagg/bole/compare/v4.0.1...v5.0.0) (2022-08-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps-dev:** bump bl from 4.1.0 to 5.0.0
+
+### Trivial Changes
+
+* **deps-dev:** bump bl from 4.1.0 to 5.0.0 ([f5dc7b6](https://github.com/rvagg/bole/commit/f5dc7b6864f18b6f011602959e84b0a4454348cd))
+* **deps-dev:** bump standard from 14.3.4 to 17.0.0 ([f192e5f](https://github.com/rvagg/bole/commit/f192e5fc2d6bd41bfb8f4fad70bed75503812054))
+* **deps-dev:** bump tape from 4.15.1 to 5.5.3 ([fb24a9d](https://github.com/rvagg/bole/commit/fb24a9d98318c3ab03e0d9eeb94214b6bab0bed4))
+* syntax fixes for standard@17 ([ad90e61](https://github.com/rvagg/bole/commit/ad90e61e7c06db8d1a78a5f8d2406b5183cb48a6))
+
 ## [4.0.1](https://github.com/rvagg/bole/compare/v4.0.0...v4.0.1) (2022-08-11)
 
 
