@@ -1,12 +1,12 @@
 {
   "name": "bole",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A tiny JSON logger",
   "main": "bole.js",
   "scripts": {
     "lint": "standard",
     "test": "npm run lint && node test.js",
-		"build": "true"
+    "build": "true"
   },
   "keywords": [
     "logging",
