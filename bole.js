@@ -4,11 +4,19 @@ const _stringify = require('fast-safe-stringify')
 const individual = require('individual')('$$bole', { fastTime: false }) // singleton
 const format = require('./format')
 const levels = 'debug info warn error'.split(' ')
-const hostname = require('os').hostname()
+const os = require('os')
 const hostnameSt = _stringify(hostname)
 const pid = process.pid
 let hasObjMode = false
 const scache = []
+
+//Issues #20
+let hostname
+try {
+  hostname = os.hostname()
+} catch (e) {
+  hostname = os.version().indexOf('Windows 7 ') === 0 ?  'windows7' : 'hostname-unknown'
+}
 
 for (const level of levels) {
   // prepare a common part of the stringified output
