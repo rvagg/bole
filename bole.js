@@ -4,11 +4,19 @@ const _stringify = require('fast-safe-stringify')
 const individual = require('individual')('$$bole', { fastTime: false }) // singleton
 const format = require('./format')
 const levels = 'debug info warn error'.split(' ')
-const hostname = require('os').hostname()
-const hostnameSt = _stringify(hostname)
+const os = require('os')
 const pid = process.pid
 let hasObjMode = false
 const scache = []
+
+// Ref: https://github.com/rvagg/bole/issues/20
+let hostname
+try {
+  hostname = os.hostname()
+} catch (e) {
+  hostname = os.version().indexOf('Windows 7 ') === 0 ? 'windows7' : 'hostname-unknown'
+}
+const hostnameSt = _stringify(hostname)
 
 for (const level of levels) {
   // prepare a common part of the stringified output
