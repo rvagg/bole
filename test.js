@@ -10,10 +10,10 @@ const hostname = require('os').hostname()
 function mklogobj (name, level, inp, fastTime) {
   const out = {
     time: fastTime ? Date.now() : new Date().toISOString(),
-    hostname: hostname,
-    pid: pid,
-    level: level,
-    name: name
+    hostname,
+    pid,
+    level,
+    name
   }
 
   for (const k in inp) {
@@ -189,7 +189,7 @@ test('test string formatting', (t) => {
     const log = bole('strfmt')
 
     bole.output({
-      level: level,
+      level,
       stream: sink
     })
 
@@ -292,7 +292,7 @@ test('test request object', (t) => {
         method: 'GET',
         url: '/foo?bar=baz',
         headers: {
-          host: host,
+          host,
           connection: 'close'
         },
         remoteAddress: '127.0.0.1',
@@ -335,7 +335,7 @@ test('test request object with message', (t) => {
         method: 'GET',
         url: '/foo?bar=baz',
         headers: {
-          host: host,
+          host,
           connection: 'close'
         },
         remoteAddress: '127.0.0.1',

@@ -92,10 +92,10 @@ function stringify (level, name, message, obj) {
 function extend (level, name, message, obj) {
   const newObj = {
     time: individual.fastTime ? Date.now() : new Date().toISOString(),
-    hostname: hostname,
-    pid: pid,
-    level: level,
-    name: name
+    hostname,
+    pid,
+    level,
+    name
   }
 
   if (message !== undefined) {
