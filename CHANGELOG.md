@@ -1,3 +1,13 @@
+## [5.0.1](https://github.com/rvagg/bole/compare/v5.0.0...v5.0.1) (2022-11-14)
+
+
+### Trivial Changes
+
+* **deps-dev:** bump bl from 5.1.0 to 6.0.0 ([#29](https://github.com/rvagg/bole/issues/29)) ([4e4bd09](https://github.com/rvagg/bole/commit/4e4bd096c8a5389e97473e1c6c2843af3f43fcd7))
+* **no-release:** bump actions/checkout from 3.0.2 to 3.1.0 ([#27](https://github.com/rvagg/bole/issues/27)) ([68b645a](https://github.com/rvagg/bole/commit/68b645aaa3163ddb8d59817a1e3c18855f47c8ca))
+* **no-release:** bump actions/setup-node from 3.4.1 to 3.5.0 ([#26](https://github.com/rvagg/bole/issues/26)) ([58b9a0d](https://github.com/rvagg/bole/commit/58b9a0d1445c6c6dde6f83c7bfd86792e8a86147))
+* **no-release:** bump actions/setup-node from 3.5.0 to 3.5.1 ([#28](https://github.com/rvagg/bole/issues/28)) ([ec4ebed](https://github.com/rvagg/bole/commit/ec4ebedeebb73cca7bc2b209f9a444daf53de1c5))
+
 ## [5.0.0](https://github.com/rvagg/bole/compare/v4.0.1...v5.0.0) (2022-08-11)
 
 
