@@ -42,7 +42,7 @@ $ node main
 
 ## Features
 
-* Very fast, bole has been optimised for common cases and is designed to add minimal overhead to your applications, use the `fastTime` feature (below) to make it even faster
+* Very fast, bole has been optimised for common cases and is designed to add minimal overhead to your applications, use the `bole.setFastTime()` feature (below) to make it even faster
 * Arbitrary log **names**, create a logger by calling `const log = bole('logname')` and `'logname'` will be attached to the output
 * Loggers have 4 levels / methods: `log.debug()`, `log.info()`, `log.warn()`, `log.error()`
 * Log methods accept `console.log()` style strfmt output ( using`util.format()`): `log.warn('foo %s', 'bar')`
