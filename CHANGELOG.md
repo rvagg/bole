@@ -1,3 +1,17 @@
+## [5.0.4](https://github.com/rvagg/bole/compare/v5.0.3...v5.0.4) (2023-04-24)
+
+
+### Bug Fixes
+
+* node.js versions in workflow ([1711c61](https://github.com/rvagg/bole/commit/1711c61a3c303b5076ba889761d711f734711e49))
+
+
+### Trivial Changes
+
+* adjust naming of setFastTime feature in README ([#34](https://github.com/rvagg/bole/issues/34)) ([41ac45d](https://github.com/rvagg/bole/commit/41ac45dee9edb569128d681f6839828ee11b9b0a))
+* **deps:** bump actions/checkout from 3.3.0 to 3.5.0 ([#36](https://github.com/rvagg/bole/issues/36)) ([e691334](https://github.com/rvagg/bole/commit/e69133480b141ecce6eaee8a401823dbb8de152f))
+* **deps:** bump actions/checkout from 3.5.0 to 3.5.2 ([#38](https://github.com/rvagg/bole/issues/38)) ([a8b6053](https://github.com/rvagg/bole/commit/a8b6053ca76c0d5af616686a3e69402ef4bd095e))
+
 ## [5.0.3](https://github.com/rvagg/bole/compare/v5.0.2...v5.0.3) (2023-01-06)
 
 
