@@ -5,7 +5,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [14.x, 16.x, lts/*]
+        node: [16.x, 18.x, 20.x, lts/*]
         os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3.6.0
         with:
-          node-version: 16
+          node-version: lts/*
       - name: Install dependencies
         run: |
           npm install --no-progress --no-package-lock --no-save
