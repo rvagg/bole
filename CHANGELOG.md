@@ -1,3 +1,10 @@
+## [5.0.9](https://github.com/rvagg/bole/compare/v5.0.8...v5.0.9) (2023-10-18)
+
+
+### Trivial Changes
+
+* **deps:** bump actions/checkout from 4.1.0 to 4.1.1 ([ef204e5](https://github.com/rvagg/bole/commit/ef204e50b8556744022fb0a09e91c5efb01e1e62))
+
 ## [5.0.8](https://github.com/rvagg/bole/compare/v5.0.7...v5.0.8) (2023-09-25)
 
 
