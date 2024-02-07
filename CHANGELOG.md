@@ -1,3 +1,10 @@
+## [5.0.11](https://github.com/rvagg/bole/compare/v5.0.10...v5.0.11) (2024-02-07)
+
+
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 4.0.1 to 4.0.2 ([afa1564](https://github.com/rvagg/bole/commit/afa1564eee3864810facbb80568c30504019c6cb))
+
 ## [5.0.10](https://github.com/rvagg/bole/compare/v5.0.9...v5.0.10) (2024-01-01)
 
 
