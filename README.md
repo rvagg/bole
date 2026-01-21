@@ -2,9 +2,9 @@
 
 **A tiny JSON logger, optimised for speed and simplicity**
 
-[![Travis Status](https://api.travis-ci.com/rvagg/bole.svg?branch=master)](https://travis-ci.com/rvagg/bole)
+[![CI](https://github.com/rvagg/bole/actions/workflows/test-and-release.yml/badge.svg)](https://github.com/rvagg/bole/actions/workflows/test-and-release.yml)
 
-[![NPM](https://nodei.co/npm/bole.svg)](https://nodei.co/npm/bole/)
+[![NPM](https://nodei.co/npm/bole.svg?style=flat&data=n,v&color=blue)](https://nodei.co/npm/bole/)
 
 Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bole** aims for even more simplicity, supporting only the common-case basics.
 
