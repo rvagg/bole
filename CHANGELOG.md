@@ -1,3 +1,9 @@
+## [5.0.27](https://github.com/rvagg/bole/compare/v5.0.26...v5.0.27) (2026-01-23)
+
+### Trivial Changes
+
+* **deps:** bump actions/checkout from 6.0.1 to 6.0.2 ([#74](https://github.com/rvagg/bole/issues/74)) ([5ad5602](https://github.com/rvagg/bole/commit/5ad56022ef7f0d1f669962fc722ad648377c12ce))
+
 ## [5.0.26](https://github.com/rvagg/bole/compare/v5.0.25...v5.0.26) (2026-01-21)
 
 ### Trivial Changes
