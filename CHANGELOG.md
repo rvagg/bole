@@ -1,3 +1,9 @@
+## [5.0.28](https://github.com/rvagg/bole/compare/v5.0.27...v5.0.28) (2026-03-06)
+
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 6.2.0 to 6.3.0 ([#75](https://github.com/rvagg/bole/issues/75)) ([8c73928](https://github.com/rvagg/bole/commit/8c73928f9ddf5cd0a98dda09d319f90aaa889dab))
+
 ## [5.0.27](https://github.com/rvagg/bole/compare/v5.0.26...v5.0.27) (2026-01-23)
 
 ### Trivial Changes
