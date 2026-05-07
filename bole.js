@@ -1,10 +1,10 @@
-'use strict'
+import _stringify from 'fast-safe-stringify'
+import * as os from 'node:os'
+import format from './format.js'
 
-const _stringify = require('fast-safe-stringify')
-const individual = require('individual')('$$bole', { fastTime: false }) // singleton
-const format = require('./format')
+// stash on globalThis so duplicate bole copies in a dep tree share one registry
+const individual = (globalThis.$$bole ??= { fastTime: false })
 const levels = 'debug info warn error'.split(' ')
-const os = require('os')
 const pid = process.pid
 let hasObjMode = false
 const scache = []
@@ -233,4 +233,4 @@ bole.setFastTime = function setFastTime (b) {
   return bole
 }
 
-module.exports = bole
+export default bole
