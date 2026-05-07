@@ -2,8 +2,6 @@
 
 **A tiny JSON logger, optimised for speed and simplicity**
 
-[![CI](https://github.com/rvagg/bole/actions/workflows/test-and-release.yml/badge.svg)](https://github.com/rvagg/bole/actions/workflows/test-and-release.yml)
-
 [![NPM](https://nodei.co/npm/bole.svg?style=flat&data=n,v&color=blue)](https://nodei.co/npm/bole/)
 
 Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bole** aims for even more simplicity, supporting only the common-case basics.
@@ -14,9 +12,11 @@ Log JSON from within Node.js applications. The log format is obviously inspired 
 
 **mymodule.js**
 ```js
-const log = require('bole')('mymodule')
+import bole from 'bole'
 
-module.exports.derp = () => {
+const log = bole('mymodule')
+
+export function derp () {
   log.debug('W00t!')
   log.info('Starting mymodule#derp()')
 }
@@ -24,15 +24,15 @@ module.exports.derp = () => {
 
 **main.js**
 ```js
-const bole = require('bole')
-const mod  = require('./mymodule')
+import bole from 'bole'
+import { derp } from './mymodule.js'
 
 bole.output({
   level: 'info',
   stream: process.stdout
 })
 
-mod.derp()
+derp()
 ```
 
 ```text
@@ -82,10 +82,14 @@ If you require more sophisticated serialisation of your objects, then write a ut
 The `logger` object returned by `bole(name)` is also a function that accepts a `name` argument. It returns a new logger whose name is the parent logger with the new name appended after a `':'` character. This is useful for splitting a logger up for grouping events. Consider the HTTP server case where you may want to group all events from a particular request together:
 
 ```js
+import http from 'node:http'
+import { randomUUID } from 'node:crypto'
+import bole from 'bole'
+
 const log = bole('server')
 
 http.createServer((req, res) => {
-  req.log = log(uuid.v4()) // make a new sub-logger
+  req.log = log(randomUUID()) // make a new sub-logger
   req.log.info(req)
 
   //...
