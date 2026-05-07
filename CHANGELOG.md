@@ -1,3 +1,13 @@
+## [6.0.0](https://github.com/rvagg/bole/compare/v5.0.29...v6.0.0) (2026-05-07)
+
+### ⚠ BREAKING CHANGES
+
+* convert to ESM, require Node.js >= 20 (#80)
+
+### Features
+
+* convert to ESM, require Node.js >= 20 ([#80](https://github.com/rvagg/bole/issues/80)) ([006a9bb](https://github.com/rvagg/bole/commit/006a9bb8a08f354cd93c9df3db0242319474d552))
+
 ## [5.0.29](https://github.com/rvagg/bole/compare/v5.0.28...v5.0.29) (2026-04-28)
 
 ### Trivial Changes
