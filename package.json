@@ -1,6 +1,6 @@
 {
   "name": "bole",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "A tiny JSON logger",
   "type": "module",
   "main": "bole.js",
