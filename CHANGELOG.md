@@ -1,3 +1,5 @@
+## [6.0.4](https://github.com/rvagg/bole/compare/v6.0.3...v6.0.4) (2026-07-02)
+
 ## [6.0.3](https://github.com/rvagg/bole/compare/v6.0.2...v6.0.3) (2026-06-23)
 
 ### Trivial Changes
