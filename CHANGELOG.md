@@ -1,3 +1,5 @@
+## [6.0.7](https://github.com/rvagg/bole/compare/v6.0.6...v6.0.7) (2026-07-22)
+
 ## [6.0.6](https://github.com/rvagg/bole/compare/v6.0.5...v6.0.6) (2026-07-21)
 
 ## [6.0.5](https://github.com/rvagg/bole/compare/v6.0.4...v6.0.5) (2026-07-15)
