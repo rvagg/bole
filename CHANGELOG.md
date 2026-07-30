@@ -1,3 +1,9 @@
+## [6.0.8](https://github.com/rvagg/bole/compare/v6.0.7...v6.0.8) (2026-07-30)
+
+### Trivial Changes
+
+* downgrade broken changelog maker, backfill entries ([#89](https://github.com/rvagg/bole/issues/89)) ([f76f311](https://github.com/rvagg/bole/commit/f76f311e0151525eca98c7bc833643a8c09bada1))
+
 ## [6.0.7](https://github.com/rvagg/bole/compare/v6.0.6...v6.0.7) (2026-07-22)
 
 ### Trivial Changes
