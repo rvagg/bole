@@ -1,10 +1,26 @@
 ## [6.0.7](https://github.com/rvagg/bole/compare/v6.0.6...v6.0.7) (2026-07-22)
 
+### Trivial Changes
+
+* **ci:** slow down dependabot, add depsound, pin action hashes ([#88](https://github.com/rvagg/bole/issues/88)) ([88f3b0b](https://github.com/rvagg/bole/commit/88f3b0b4e314fc4b6ea46a6edecf4f699125b3c7))
+
 ## [6.0.6](https://github.com/rvagg/bole/compare/v6.0.5...v6.0.6) (2026-07-21)
+
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 6.4.0 to 7.0.0 ([#86](https://github.com/rvagg/bole/issues/86)) ([78b0d1a](https://github.com/rvagg/bole/commit/78b0d1a2dafbfeb828b377e76429fa02d6643a70))
 
 ## [6.0.5](https://github.com/rvagg/bole/compare/v6.0.4...v6.0.5) (2026-07-15)
 
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 6 to 6.4.0 ([#85](https://github.com/rvagg/bole/issues/85)) ([cc718a0](https://github.com/rvagg/bole/commit/cc718a0d802638910c3c11cb396847da5e698159))
+
 ## [6.0.4](https://github.com/rvagg/bole/compare/v6.0.3...v6.0.4) (2026-07-02)
+
+### Trivial Changes
+
+* **deps-dev:** bump conventional-changelog-conventionalcommits ([#84](https://github.com/rvagg/bole/issues/84)) ([1d920ec](https://github.com/rvagg/bole/commit/1d920eca73ab4b3099b622591168d124328ae11e))
 
 ## [6.0.3](https://github.com/rvagg/bole/compare/v6.0.2...v6.0.3) (2026-06-23)
 
