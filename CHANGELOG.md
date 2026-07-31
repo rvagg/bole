@@ -1,3 +1,9 @@
+## [6.0.9](https://github.com/rvagg/bole/compare/v6.0.8...v6.0.9) (2026-07-31)
+
+### Trivial Changes
+
+* **deps:** bump the github-actions-minor-patch group with 2 updates ([#90](https://github.com/rvagg/bole/issues/90)) ([b17a93c](https://github.com/rvagg/bole/commit/b17a93c4ca798ff6994f54c54dd06d8c01b98f64))
+
 ## [6.0.8](https://github.com/rvagg/bole/compare/v6.0.7...v6.0.8) (2026-07-30)
 
 ### Trivial Changes
