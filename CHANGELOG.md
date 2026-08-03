@@ -1,3 +1,9 @@
+## [6.0.10](https://github.com/rvagg/bole/compare/v6.0.9...v6.0.10) (2026-08-03)
+
+### Trivial Changes
+
+* **deps-dev:** bump @semantic-release/changelog from 6.0.3 to 7.0.0 ([#93](https://github.com/rvagg/bole/issues/93)) ([a31d885](https://github.com/rvagg/bole/commit/a31d8852b8bb61a030a33377e3cdc9d337765add))
+
 ## [6.0.9](https://github.com/rvagg/bole/compare/v6.0.8...v6.0.9) (2026-07-31)
 
 ### Trivial Changes
