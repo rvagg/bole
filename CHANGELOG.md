@@ -1,3 +1,9 @@
+## [6.0.11](https://github.com/rvagg/bole/compare/v6.0.10...v6.0.11) (2026-08-03)
+
+### Trivial Changes
+
+* **deps-dev:** bump @semantic-release/git from 10.0.1 to 11.0.1 ([#91](https://github.com/rvagg/bole/issues/91)) ([3403913](https://github.com/rvagg/bole/commit/3403913f75a0150867bd84cb451d83028113468c))
+
 ## [6.0.10](https://github.com/rvagg/bole/compare/v6.0.9...v6.0.10) (2026-08-03)
 
 ### Trivial Changes
